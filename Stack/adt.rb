@@ -1,4 +1,4 @@
-class Stack
+ class Stack
     
     def initialize
         @stack = []
@@ -40,19 +40,41 @@ end
 class Map
 
     def initialize
-        @map = Hash.new
+        @map = []
     end
 
-    def set(key,value)
-        @map[key] = value    
+    def set(keys,val)
+        replace_set(keys,val)
+        add_set(keys,val) if !@map.include?([keys,val])
     end
 
-    def get(key)
-        @map[key]
+    def add_set(keys,val)
+        @map << [keys,val]
+        p "set has been added"
     end
 
-    def delete(key)
-        @map.delete(key)
+    def replace_set(keys,val)
+        @map.each.with_index do |set,i|
+            if set[0] == keys
+                @map[i] = [keys,val]
+            end
+        end
+        p "value has been updated"
+    end
+
+
+    def get(keys)
+        @map.each do |set|
+            return set[1] if set[0] == keys
+        end
+        false
+    end
+
+    def delete(keys)
+        @map.each.with_index do |set,i|
+            @map = @map[0...i] + @map[i+1..-1] if set[0] == keys
+        end
+        @map
     end
 
     def show
