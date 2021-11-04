@@ -1,25 +1,14 @@
-
+require_relative '00_tree_node'
 
 class KPF
-    attr_reader :root_pos, :considered_pos, :current_position
+    attr_reader :start_pos, :considered_pos, :current_position
 
-    def initialize(starting_pos)
-        @current_position = [starting_pos]
-        @root_pos = [starting_pos]
-        @considered_pos = [starting_pos]
-    end
-
-    # def root_pos=(pos)
-    #     if @root_pos != nil
-    #         @root_pos.possible_pos.delete(self)
-    #     end
-    #     @root_pos = pos
-    #     pos.possible_pos << self if pos != nil
-    # end
-
-    def move_spot=(pos)
-        @root_pos = @current_position
-        @current_position = pos
+    def initialize(start_pos)
+        @parent = [start_pos]
+        @current_node = [start_pos]
+        @children = []
+        @considered_pos = [start_pos]
+        @children += new_move_positions(start_pos) 
     end
 
     def self.valid_moves(pos)
@@ -34,19 +23,10 @@ class KPF
         new_pos
     end
 
+
     def build_move_tree(target)
-        # que = [self]
-        # until que.empty?
-        #     pos = que.shift
-        #     return pos if pos.current_position == target
-        #     que += pos.possible_pos
-        # end
 
     end
-
-    # def find_path(target)
-    # end
-
 
 
 end
