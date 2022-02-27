@@ -1,14 +1,12 @@
-require_relative '00_tree_node'
-
-class KPF
-    attr_reader :start_pos, :considered_pos, :current_position
+require_relative '00_tree_node.rb'
+ 
+class KnightPathFinder
+    attr_accessor :considered_pos, :root_node
 
     def initialize(start_pos)
-        @parent = [start_pos]
-        @current_node = [start_pos]
-        @children = []
+        @root_node = PolyTreeNode.new(start_pos)
         @considered_pos = [start_pos]
-        @children += new_move_positions(start_pos) 
+
     end
 
     def self.valid_moves(pos)
@@ -18,15 +16,32 @@ class KPF
     end
 
     def new_move_positions(pos)
-        new_pos = KPF.valid_moves(pos).select {|pos| !@considered_pos.include?(pos)}
+        new_pos = KnightPathFinder.valid_moves(pos).select {|poss| !@considered_pos.include?(poss)}
         @considered_pos += new_pos
         new_pos
     end
 
 
-    def build_move_tree(target)
+    def build_move_tree
+        queue = [@root_node]
+        until queue.empty?
+            node = queue.shift
+            pos_pos = new_move_positions(node.value).map! {|pos| PolyTreeNode.new(pos)}
+            pos_pos.each {|child| node.add_child(child)}
+            queue += pos_pos
+        end
+    end
+
+    def find_path(end_pos)
+        trace_path_back(@root_node.dfs(end_pos))
 
     end
 
+    def trace_path_back(ele)
+        return [ele.value] if ele.parent == nil
+        trace_path_back(ele.parent) + [ele.value]
+
+    end
 
 end
+
